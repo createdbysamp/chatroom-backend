@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { users } from "../data/store.js";
+import { users, saveUsers } from "../data/store.js";
 
 const router = express.Router();
 const JWT_SECRET =
@@ -42,6 +42,9 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
       createdAt: new Date().toISOString(),
     });
+
+    // Save users to file
+    saveUsers();
 
     // Generate token
     const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: "7d" });
